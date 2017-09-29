@@ -1,93 +1,120 @@
 const Node = require('./node');
+class LinkedList { 
+constructor() { 
+this._head = new Node(null, null, this._tail); 
+this._tail = this._head; 
+this.length = 0; 
+} 
 
-class LinkedList {
-    var start = null;
-    var tail = null;
-    
-    constructor() {}
+append(data) { 
+if (this._head.data == null) 
+{ 
+this._head.data = data; 
+this._tail.data = data; 
+} 
+else 
+{ 
+this._tail = new Node(data, this._tail, null); 
+this._tail.prev.next = this._tail; 
+} 
+this.length++; 
+} 
 
-    append(data) {
-        if (head() == null)
-        {
-            start = new Node(data);
-            tail = start;
-            start.next = tail;            
-        }
-        else
-        {
-            var newNode = new Node(data, tail);            
-            tail.next = newNode;
-            tail = newNode
-        }
-    }
+head() { 
+return this._head.data; 
+} 
 
-    head() {
-        return start;
-    }
+tail() { 
+return this._tail.data; 
+} 
 
-    tail() {
-        return tail;
-    }
+atNode(index) 
+{ 
+var result = this._head; 
+for (var i = 0; i < index; i++) 
+{ 
+result = result.next; 
+if (result == null) 
+return null; 
+} 
+return result; 
+} 
 
-    at(index) {
-        var result = start;
-        for (var i = 0; i < index; i++)
-        {
-            result = result.next;
-            if (result == null)
-                return null;
-        }
-        return result;
-    }
+at(index) { 
+if (this.atNode(index) == null) 
+return null; 
+return this.atNode(index).data; 
+} 
 
-    insertAt(index, data) {
-        var prevNode = at(index - 1);
-        if (prevNode!=null)
-        {
-            var newNode = new Node(data, prevNode);
-            prevNode.next.prev = newNode;
-            prevNode.next = newNode;
-        }
-    }
+insertAt(index, data) { 
+var prevNode = this.atNode(index - 1); 
+if (prevNode!=null) 
+{ 
+var newNode = new Node(data, prevNode, prevNode.next); 
+newNode.next.prev = newNode; 
+prevNode.next = newNode; 
+this.length++; 
+} 
+} 
 
-    isEmpty() {
-        return (start == null);
-    }
+isEmpty() { 
+return (this._head.data == null); 
+} 
 
-    clear() {
-        start = null;
-        tail = null;
-    }
+clear() { 
+this._head = new Node(null, null, this._tail); 
+this._tail = new Node(null, this._head, null); 
+this.length = 0; 
+} 
 
-    deleteAt(index) {
-        var prevNode = at(index - 1);
-        if (prevNode!=null && prevNode.next!=null)
-        {
-            var postnextNode = prevNode.next.next;            
-            prevNode.next = prevNode.next.next;
-            if (postnextNode != null)
-                postnextNode.prev = prevNode;
-        }
-    }
+deleteAt(index) { 
+var prevNode = this.atNode(index - 1); 
+if (prevNode!=null && prevNode.next!=null) 
+{ 
+var postnextNode = prevNode.next.next; 
+prevNode.next = postnextNode; 
+if (postnextNode != null) 
+postnextNode.prev = prevNode; 
+this.length--; 
+} 
+} 
 
-    reverse() {
-        var tempNode = start;
-        while (tempNode!=null)
-        {
-            tempTempNode = tempNode.next;
-            tempNode.next = tempNode.prev;
-            tempNode.prev = tempTempNode;
-            tempNode = tempNode.prev;
-        }
-    }
+reverse() { 
+var tempNode = this._head; 
+//this.print(); 
+while (tempNode!=null) 
+{ 
+var tempnextNode = tempNode.next; 
+var tempprevNode = tempNode.prev; 
+tempNode.next = tempprevNode; 
+tempNode.prev = tempnextNode; 
+tempNode = tempNode.prev; 
+} 
+//this.print(); 
+} 
 
-    indexOf(data) {
-        var index = 0;
-        var tempNode = start;
-        while (tempNode!=null)
-        {
-            if (tempNode.data == data)
-                return index;
-            index++;
+print() 
+{ 
+var tempNode = this._head; 
+while (tempNode!=null) 
+{ 
+console.log(tempNode.data); 
+tempNode = tempNode.next; 
+} 
+} 
+
+indexOf(data) { 
+var index = 0; 
+var tempNode = this._head; 
+while (tempNode!=null) 
+{ 
+if (tempNode.data == data) 
+return index; 
+index++; 
+tempNode = tempNode.next; 
+} 
+return -1; 
+} 
+} 
 
 module.exports = LinkedList;
